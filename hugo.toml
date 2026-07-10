@@ -1,0 +1,31 @@
+baseURL = "https://go-reddit.github.io/"
+title = "go-reddit"
+disableKinds = ["taxonomy", "term", "RSS", "sitemap", "404"]
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[[params.phases]]
+  name = "reddit — API client"
+  status = "ready"
+  blurb = "A stdlib-only, `CGO_ENABLED=0` client for Reddit's JSON API: subreddit, front-page and comment listings across every sort (`hot`/`new`/`top`/`rising`/`controversial`/`best`) and time window, with cursor paging and recursively-nested comment replies."
+[[params.phases]]
+  name = "Anonymous or OAuth"
+  status = "ready"
+  blurb = "Read public listings anonymously, or authenticate with the app-only (`client_credentials`) or script (`password`) grant — the reliable path now that Reddit blocks anonymous `.json` from datacenter IPs with a 403. Bearer tokens are fetched, cached and refreshed automatically over `oauth.reddit.com`."
+[[params.phases]]
+  name = "Typed errors"
+  status = "ready"
+  blurb = "Non-2xx responses surface as a typed `*reddit.APIError` carrying the status code, so callers can distinguish a 429 (rate limit) from a 403 (blocked) or a 404 (gone). 100% coverage, every error branch included."
+[[params.phases]]
+  name = "reader — native macOS app"
+  status = "ready"
+  blurb = "A Reddit reader whose entire UI — topbar sort tabs, bookmarked-subreddit sidebar, scrollable post cards — is painted by the go-widgets toolkit into an RGBA buffer at device resolution, then compiled to WebAssembly and blitted into a `<canvas>`."
+[[params.phases]]
+  name = "Zero-cgo WKWebView"
+  status = "ready"
+  blurb = "The WKWebView, NSWindow and NSApplication are driven through the Objective-C runtime via purego — the shipped binary links only system libraries, AppKit/WebKit are `dlopen`ed at runtime, and `task app` produces a double-clickable `.app` bundle. `CGO_ENABLED=0` end to end."
+[[params.phases]]
+  name = "No socket, no port"
+  status = "ready"
+  blurb = "The default transport registers a private `reader://` URL scheme and answers every request in-process from the same `http.Handler` via a `WKURLSchemeHandler` — no loopback server, no listening port. `fetch reader://app/api/feed` routes straight through go-reddit/reddit to reddit.com."
